@@ -1,0 +1,14 @@
+#hashcat configuration
+HASHCAT_EXE=C:\Hacking\hashcat_gui-0.5.2\oclHashcat-plus-0.13\cudaHashcat-plus64.exe
+HASHCAT_M=1000
+HASHCAT_A=0
+#HASHCAT_R=C:\Hacking\hashcat_gui-0.5.2\oclHashcat-plus-0.13\rules\d3ad0ne.rule
+HASHCAT_R=C:\Hacking\hashcat_gui-0.5.2\oclHashcat-plus-0.13\rules\leetspeak.rule
+HASHCAT_WORDLIST=C:\Hacking\Word Lists\rockyou.txt
+#
+#ophcrack configuration
+OPHCRACK_EXE=C:\Hacking\ophcrack\ophcrack_nogui.exe
+OPHCRACK_D=C:\Hacking\ophcrack\tables
+OPHCRACK_T=vista_free:Vista_special:xp_free_fast:xp_free_small:XP_special
+OPHCRACK_N=5
+OPHCRACK_S=ophcrack.session

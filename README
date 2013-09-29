@@ -1,0 +1,50 @@
+
+Hashcatter
+
+What does this script do?
+	Hash cracking wrapper script written in python, primarily intended for LM/NTLM hashes.
+	Parses a PWDUMP file and sends LM hashes to ophcrack and NTLM hashes to hashcat. Merges the output into a single file. Appends discovered passwords to a file.
+
+The details:
+	This script runs (the frankly awesome tools) hashcat (http://hashcat.net) and ophcrack (http://ophcrack.sourceforge.net/) to do the actual hash cracking, async_subprocess.py (https://github.com/DC214/pwcrack/blob/master/ID-PCB/Client/async_subprocess.py) to run a subprocess and get its output without deadlocking, and colorlog.py (https://gist.github.com/kergoth/813057) for colourful terminal output [depends on colorama].
+
+	The only required parameter is the hashfile in a pwdump format. i.e.
+		hashcatter.py hashfile.pwdump
+	Where hashfile.pwdump is in the format:
+		username:rid:lm_hash:ntlm_hash:pass_part1:pass_part2:passwd
+
+	After finding cracking the hash (with hashcat or ophcrack) cracked hashes and their associated plains are written to a file in the pwdump format. The cracked plain is also appended to the "discovered" file if it is not already in the file.
+
+	By default disabled, history and machine accounts are removed - this behaviour can be changed, see the help screen.
+
+	The configuration file conf/CONFIG contains the command line arguments for each program prefixed with the program name and an underscore. i.e. in hashcat the "-m 1000" option specifies the ntlm hashtype, so the config file should have the option "HASHCAT_M=1000", etc.
+	This allows the user to specify the options they would usually use with the exception of input and output files (theses are handled by this script). Note: hashcat automatically has the "--status" flag added as it is required for parsing the output correctly.
+
+State of this project:
+	Only PWDUMP files can be parsed.
+	If the LM hash is present, it is sent to ophcrack, otherwise the NTLM hash is sent to hashcat - need to change this so that user can specify which program to use and uncracked LM hashes have their NTLM counterpart sent to hashcat.
+	Hashcat and Ophcrack and be run and their output parsed.
+	There is a flaw when merging the output of hashcat and ophcrack - hashes will either be duplicated or missing depending depending on which program cracks the hash. All hashes and plains are in the program, just need to get the logic right to merge them back together. 
+
+Tested on:
+	Windows 7, Python 2.7, Ophcrack 3.4.0, cudaHaashcat-plus64 0.13
+
+Legal Stuff:	
+	Copyright (c) 2013 GrimHacker
+	Permission is hereby granted, free of charge, to any person obtaining a copy
+	of this software and associated documentation files (the "Software"), to deal
+	in the Software without restriction, including without limitation the rights
+	to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+	copies of the Software, and to permit persons to whom the Software is
+	furnished to do so, subject to the following conditions:
+
+	The above copyright notice and this permission notice shall be included in
+	all copies or substantial portions of the Software.
+
+	THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+	IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+	FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+	AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+	LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+	OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+	THE SOFTWARE.
